@@ -82,25 +82,26 @@ function Pile:Fdraw()
   end
 end
 
-Foundation_Pile = Pile:new()
+
+Foundation_Pile = {}
+setmetatable(Foundation_Pile, {__index = Pile})
+
 function Foundation_Pile:new(x, y, suit)
-  local metatable = {__index = Pile}
+  local self = setmetatable({}, {__index = Foundation_Pile})
   local cards = {Card:new(
         0, 
         suit, 
-        love.graphics.newImage("Sprites/" .. suit .. " " .. "A" .. ".png"), 
+        love.graphics.newImage("Sprites/" .. suit.s .. " " .. "A" .. ".png"), 
         true, 
         x,
         y
     )}
   cards[1].draggable = false
-  local pile = {
-    cards = cards,
-    position = Vector(x, y)
-  }
   
-  setmetatable(pile, metatable)
-  return pile
+  self.cards = cards
+  self.position = Vector(x, y)
+  
+  return self
 end
 
 function Foundation_Pile:add()
@@ -113,7 +114,6 @@ function Foundation_Pile:add()
 end
 
 function Foundation_Pile:draw()
-  print("hello")
   love.graphics.setColor(.18, .302, .255)
   self.cards[1]:draw()
   love.graphics.setColor(1, 1, 1)

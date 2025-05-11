@@ -1,40 +1,16 @@
 
+Vector = require "vector"
+Conf = require "conf"  
+
 local Card = {}
 Card.__index = Card
 
-Vector = require "vector"
 
-COLORS = {RED = 0, BLACK = 1}
+-- Load all Images --
+faceDown = love.graphics.newImage(CARD_LOCATIONS.FACEDOWN)
+emptyCard = love.graphics.newImage(CARD_LOCATIONS.EMPTY)
+solitaire = love.graphics.newImage(CARD_LOCATIONS.SOLITAIRE)
 
-suits = {{s = "Hearts", c = COLORS.RED}, {s = "Diamonds", c = COLORS.RED}, {s = "Clubs", c = COLORS.BLACK}, {s = "Spades", c = COLORS.BLACK}}
-ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"}
-draggableCard = nil
-
-width  = 800
-height = 600
-cardPosY = height*0.46
-foundPosY = cardPosY-125
-scale = 1.5
-faceDown = love.graphics.newImage("Sprites/Card Back 1.png")
-emptyCard = love.graphics.newImage("Sprites/Card Back 2.png")
-
-cardHeight = faceDown:getHeight() * scale
-cardWidth = faceDown:getWidth() * scale
-
-
-regions = {
-  {start = width*0.21, finish = width*0.3, y = cardPosY},
-  {start = width*0.31, finish = width*0.4, y = cardPosY},
-  {start = width*0.41, finish = width*0.5, y = cardPosY},
-  {start = width*0.51, finish = width*0.6, y = cardPosY},
-  {start = width*0.61, finish = width*0.7, y = cardPosY},
-  {start = width*0.71, finish = width*0.8, y = cardPosY},
-  {start = width*0.81, finish = width*0.9, y = cardPosY},
-  {start = width*0.51, finish = width*0.6, y = foundPosY, endY = foundPosY + cardHeight},
-  {start = width*0.61, finish = width*0.7 + cardWidth, y = foundPosY, endY = foundPosY + cardHeight},
-  {start = width*0.71, finish = width*0.8, y = foundPosY, endY = foundPosY + cardHeight},
-  {start = width*0.81, finish = width*0.9, y = foundPosY, endY = foundPosY + cardHeight}
-}
 
 function Card:new(rank, suit, sprite, faceUp, x, y)
   local metatable = {__index = Card}

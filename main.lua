@@ -3,30 +3,22 @@
 -- CMPM 121
 -- 4-14-2025
 
---io.stdout:setvbuf("no")
-
 local Deck = require "deck"
 local Pile = require "pile"
 local Card = require "card"
+local Sys  = require "sys-set"
 
-width  = 800
-height = 600
+io.stdout:setvbuf("no")
 
-mousePressed = false
+local mousePressed = false
+local draggableCard = nil
 
-solitaire = love.graphics.newImage("Sprites/Solitaire.png")
-
-piles = {}
-cardWaste = Pile:new(width*0.036, foundPosY + 125)
-cardBuffer = {}
+local cardWaste = Pile:new(width*0.036, foundPosY + 125)
+local cardBuffer = {}
 
 function love.load()
-  love.window.setTitle("Solitaire")
-  love.graphics.setDefaultFilter("nearest", "nearest")
-  love.window.setMode(width, height)
-  love.graphics.setBackgroundColor(.216, .396, .302)
-  math.randomseed(os.time())
-  --math.randomseed(3)
+  
+  System_Set()
   
   
   deck = Deck:new(width*0.036, foundPosY)
@@ -37,17 +29,7 @@ function love.load()
   end
   
   for i, suit in ipairs(suits) do
-    table.insert(piles, Foundation_Pile:new(width*0.425+width*0.1*i, foundPosY, suit.s))
---    place = Card:new(
---        0, 
---        suit, 
---        love.graphics.newImage("Sprites/" .. suit.s .. " " .. "A" .. ".png"), 
---        true, 
---        piles[#piles].position.x, 
---        piles[#piles].position.y
---    )
---    place.draggable = false
---    piles[#piles]:add(place)
+    table.insert(piles, Foundation_Pile:new(width*0.425+width*0.1*i, foundPosY, suit))
   end
   for num, pile in ipairs(piles) do
     if num < 8 then
