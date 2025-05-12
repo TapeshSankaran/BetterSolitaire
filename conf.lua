@@ -11,7 +11,7 @@ img_height = 40
 scale = 1.5
 
 -- Set Random Seed --
-seed = os.time() -- 3 for testing, os.time() for main use
+seed = 3--os.time() -- 3 for testing, os.time() for main use
 
 -- _______________________________________________________________________ --
 
@@ -50,16 +50,19 @@ regions = {
 
    -- Card Locations --
 CARD_LOCATIONS = {
-  FACEDOWN = "Sprites/Card Back 1.png",
-  EMPTY = "Sprites/Card Back 2.png",
+  FACEDOWN  = "Sprites/Card Back 1.png",
+  EMPTY     = "Sprites/Card Back 2.png",
   SOLITAIRE = "Sprites/Solitaire.png"
 }
 
    -- Colors --
 COLORS = {
-  GREEN = {.216, .396, .302},
-  DARK_GREEN = {}
+  WHITE        = {1, 1, 1},
+  GREEN        = {.216, .396, .302},
+  DARK_GREEN   = {.18, .302, .255},
+  DARKER_GREEN = {.14, .255, .230},
+  GOLD         = {1.00, 0.860, 0.25},
 }
 
 -- Global Vars --
-piles = {}
+board = {}

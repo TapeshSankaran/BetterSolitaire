@@ -1,6 +1,6 @@
 
 Vector = require "vector"
-Conf = require "conf"  
+Config = require "conf"  
 
 local Card = {}
 Card.__index = Card
@@ -70,7 +70,6 @@ function Card:stopDrag(mouseX, mouseY)
     for i, region in ipairs(regions) do
       
       if mouseX > region.start and mouseX < region.finish and mouseY > region.y then
-        --print(piles[i].cards[#piles[i].cards])
         if piles[i] == self.pile then break
         elseif #piles[i].cards == 0 then
           if ranks[self.rank] == "K" then
@@ -84,7 +83,7 @@ function Card:stopDrag(mouseX, mouseY)
           return
         elseif i >= 8 and piles[i].cards[#piles[i].cards].suit.s == self.suit.s and piles[i].cards[#piles[i].cards].rank+1 == self.rank and self.pile.cards[#self.pile.cards] == self then
           self.pile:remove()
-          piles[i]:Fadd(self)
+          piles[i]:add(self)
           self.isDragging = false
           return
         end
@@ -95,7 +94,9 @@ function Card:stopDrag(mouseX, mouseY)
 end
 
 function Card:update(dt, mouseX, mouseY)
+    print("wsg")
     if self.isDragging and self.faceUp then
+        
         self.position.x = mouseX - self.offsetX
         self.position.y = mouseY - self.offsetY
     end

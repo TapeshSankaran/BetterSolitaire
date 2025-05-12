@@ -25,17 +25,7 @@ function Pile:add(card)
   table.insert(self.cards, card)
 end
 
-function Pile:Fadd(card)
-  card.faceUp = true
-  card.pile = self
-  card.position = Vector(self.position.x, self.position.y)
-  card.anchor = Vector(self.position.x, self.position.y)
-
-  table.insert(self.cards, card)
-end
-
 function Pile:remove()
-  --self.cards[#self.cards].pile = nil
   local card = table.remove(self.cards)
   if #self.cards > 0 then
     self.cards[#self.cards].faceUp = true
@@ -73,16 +63,6 @@ function Pile:draw()
   end
 end
 
-function Pile:Fdraw()
-  love.graphics.setColor(.18, .302, .255)
-  self.cards[1]:draw()
-  love.graphics.setColor(1, 1, 1)
-  for i=2,#self.cards,1 do
-    self.cards[i]:draw()
-  end
-end
-
-
 Foundation_Pile = {}
 setmetatable(Foundation_Pile, {__index = Pile})
 
@@ -104,7 +84,7 @@ function Foundation_Pile:new(x, y, suit)
   return self
 end
 
-function Foundation_Pile:add()
+function Foundation_Pile:add(card)
   card.faceUp = true
   card.pile = self
   card.position = Vector(self.position.x, self.position.y)
