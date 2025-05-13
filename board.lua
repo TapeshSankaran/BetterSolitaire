@@ -75,7 +75,7 @@ function Board:pull_from_deck()
   else -- If there are cards in waste pile, set top card to draggable --
     table.insert(self.action_stack, {cT})
     self.cardWaste.cards[#self.cardWaste.cards].draggable = true
-    move_SFX:play()
+    draw_SFX:play()
   end
 end
 
@@ -119,6 +119,7 @@ function Board:undo_deck_refresh(action_one, action_two)
     self.cardWaste.cards[#self.cardWaste.cards].draggable = true
   end
   self.deck.cards = {}
+  shuffle_SFX:play()
 end
 
 -- UNDO PULLING CARDS FROM DECK --
@@ -133,6 +134,7 @@ function Board:undo_card_pull(action)
   if #self.cardWaste.cards > 0 then
     self.cardWaste.cards[#self.cardWaste.cards].draggable = true
   end
+  draw_SFX:play()
 end
 
 -- RESET BOARD --
@@ -142,7 +144,21 @@ function Board:reset()
   board = Board:new()
 end
 
-
+-- WIN CONDITION --
+function Board:is_won()
+  for i, pile in ipairs(self.piles) do
+    if PILE_TYPES[i] == TorF.FOUNDATION then
+      if pile.cards[#pile.cards].rank == 0 then 
+        return false
+      end
+      
+      if ranks[pile.cards[#pile.cards].rank] ~= "K" then
+        return false
+      end
+    end
+  end
+  return true
+end
 
 -- DRAW BOARD BACKGROUND --
 function Board:draw_background()

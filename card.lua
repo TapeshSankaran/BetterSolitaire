@@ -11,11 +11,18 @@ emptyCard = love.graphics.newImage(FILE_LOCATIONS.EMPTY)
 solitaire = love.graphics.newImage(FILE_LOCATIONS.SOLITAIRE)
 reset_img = love.graphics.newImage(FILE_LOCATIONS.RESET)
 undo_img  = love.graphics.newImage(FILE_LOCATIONS.UNDO)
+win_img  = love.graphics.newImage(FILE_LOCATIONS.VICTORY)
 
 -- Load all Audio --
 win_SFX     = love.audio.newSource(FILE_LOCATIONS.WIN, "static")
 shuffle_SFX = love.audio.newSource(FILE_LOCATIONS.SHUFFLE, "static")
 move_SFX    = love.audio.newSource(FILE_LOCATIONS.MOVE, "static")
+draw_SFX    = love.audio.newSource(FILE_LOCATIONS.DRAW, "static")
+
+-- Edit Audio --
+move_SFX:setVolume(0.5)
+move_SFX:setPitch(2)
+
 
 -- CREATE NEW CARD --
 function Card:new(rank, suit, sprite, faceUp, x, y)
@@ -77,15 +84,15 @@ function Card:transfer(pile, undo_action)
     self.pile:remove()
     pile:add(self, undo_action)
     self.isDragging = false
-    return
+  else
+    local cT = self.pile:removeI(self)
+    
+    for _,c in ipairs(cT) do
+      pile:add(c)
+    end
+    self.isDragging = false
   end
-  
-  local cT = self.pile:removeI(self)
-  
-  for _,c in ipairs(cT) do
-    pile:add(c)
-  end
-  self.isDragging = false
+  move_SFX:play()
 end
   
 -- STOP DRAGGING CARD --

@@ -8,8 +8,6 @@ local Sys    = require "sys-set"
 local Board  = require "board" 
 local Drag   = require "drag"
 
-io.stdout:setvbuf("no")
-
 local cardBuffer = {}
 
 -- LOAD FUNCTION --
@@ -40,4 +38,8 @@ function love.draw()
   -- Draw Selected Card --
   --  (from drag.lua)   --
   dragged_card_draw()
+  
+  -- Draw Win Screen --
+  -- (from drag.lua) --
+  win_screen_draw()
 end

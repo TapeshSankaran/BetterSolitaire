@@ -3,6 +3,7 @@ local Config = "conf"
 
 local mousePressed = false
 local draggableCard = nil
+local not_won = true
 
 function love.update(dt)
   local mouseX, mouseY = love.mouse.getPosition()
@@ -10,7 +11,19 @@ function love.update(dt)
   if draggableCard then
     draggableCard:update(dt, mouseX, mouseY)
   end
+  
+  if board:is_won() and not_won then
+    win_SFX:play()
+    not_won = false
+    for i, pile in ipairs(board.piles) do
+      if PILE_TYPES[i] == TorF.FOUNDATION then
+        pile.cards[#pile.cards].draggable = false
+      end
+    end
+  end
 end
+
+
 
 function love.mousepressed(x, y, button, istouch, presses)
   if button == 1 and draggableCard == nil then
@@ -34,7 +47,6 @@ end
 function love.mousereleased(x, y, button, istouch, releases)
   if button == 1 and draggableCard then
     stop_drag(x, y)
-    move_SFX:play()
   end
   mousePressed = false
 end
@@ -59,6 +71,12 @@ function dragged_card_draw()
   love.graphics.setColor(COLORS.GOLD)
   if draggableCard ~= nil then
     draggableCard:draw()
+  end
+end
+
+function win_screen_draw()
+  if not_won == false then
+    love.graphics.draw(win_img, width*0.02, height*0.15, 0, 0.75, 0.75)
   end
 end
 

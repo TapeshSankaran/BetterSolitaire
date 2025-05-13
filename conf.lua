@@ -11,7 +11,7 @@ img_height = 40
 scale = 1.5
 
 -- Set Random Seed --
-seed = 3--os.time() -- 3 for testing, os.time() for main use
+seed = os.time() -- 3 for testing, os.time() for main use
 
 -- _______________________________________________________________________ --
 
@@ -65,10 +65,12 @@ FILE_LOCATIONS = {
   SOLITAIRE = "Sprites/Solitaire.png",
   RESET     = "Sprites/Reset.png",
   UNDO      = "Sprites/Undo.png",
+  VICTORY   = "Sprites/Win.png",
     -- Audio --
   WIN       = "SFX/Win.mp3",
   SHUFFLE   = "SFX/Shuffle.mp3",
   MOVE      = "SFX/Move2.mp3",
+  DRAW      = "SFX/Draw.mp3",
 }
 
    -- Colors --
