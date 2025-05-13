@@ -55,6 +55,12 @@ function Deck:stage(card)
   table.insert(self.cards, card)
 end
 
+function Deck:floor(card)
+  card.faceUp = false
+  card.position = self.position
+  table.insert(self.cards, 1, card)
+end
+
 function Deck:isMouseOver(mouseX, mouseY)
   local width = faceDown:getWidth() * scale
   local height = faceDown:getHeight() * scale

@@ -15,6 +15,16 @@ seed = 3--os.time() -- 3 for testing, os.time() for main use
 
 -- _______________________________________________________________________ --
 
+-- Dimensions of Reset Button --
+reset_x = width*0.0125
+reset_y = height*0.90
+reset_scale = 0.1
+
+-- Dimensions of Reset Button --
+undo_x = width*0.0125
+undo_y = height*0.80
+undo_scale = 0.1
+
 -- Height of Tableau from Top --
 cardPosY = height*0.46
 
@@ -26,9 +36,9 @@ cardHeight = img_height * scale
 cardWidth = img_width * scale
 
 -- ENUMS -- 
-COLORS = {RED = 0, BLACK = 1}
+CARD_COLORS = {RED = 0, BLACK = 1}
    -- Suits w/ Respective Colors --
-suits = {{s = "Hearts", c = COLORS.RED}, {s = "Diamonds", c = COLORS.RED}, {s = "Clubs", c = COLORS.BLACK}, {s = "Spades", c = COLORS.BLACK}}
+suits = {{s = "Hearts", c = CARD_COLORS.RED}, {s = "Diamonds", c = CARD_COLORS.RED}, {s = "Clubs", c = CARD_COLORS.BLACK}, {s = "Spades", c = CARD_COLORS.BLACK}}
 
    -- Ranks --
 ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"}
@@ -43,16 +53,22 @@ regions = {
   {start = width*0.71, finish = width*0.8, y = cardPosY},                                              -- tableau 6
   {start = width*0.81, finish = width*0.9, y = cardPosY},                                              -- tableau 7
   {start = width*0.51, finish = width*0.6, y = foundPosY, endY = foundPosY + cardHeight},              -- foundation 1
-  {start = width*0.61, finish = width*0.7 + cardWidth, y = foundPosY, endY = foundPosY + cardHeight},  -- foundation 2
+  {start = width*0.61, finish = width*0.7, y = foundPosY, endY = foundPosY + cardHeight},              -- foundation 2
   {start = width*0.71, finish = width*0.8, y = foundPosY, endY = foundPosY + cardHeight},              -- foundation 3
   {start = width*0.81, finish = width*0.9, y = foundPosY, endY = foundPosY + cardHeight}               -- foundation 4
 }
 
-   -- Card Locations --
-CARD_LOCATIONS = {
+   -- File Locations --
+FILE_LOCATIONS = {
   FACEDOWN  = "Sprites/Card Back 1.png",
   EMPTY     = "Sprites/Card Back 2.png",
-  SOLITAIRE = "Sprites/Solitaire.png"
+  SOLITAIRE = "Sprites/Solitaire.png",
+  RESET     = "Sprites/Reset.png",
+  UNDO      = "Sprites/Undo.png",
+    -- Audio --
+  WIN       = "SFX/Win.mp3",
+  SHUFFLE   = "SFX/Shuffle.mp3",
+  MOVE      = "SFX/Move2.mp3",
 }
 
    -- Colors --
@@ -62,7 +78,31 @@ COLORS = {
   DARK_GREEN   = {.18, .302, .255},
   DARKER_GREEN = {.14, .255, .230},
   GOLD         = {1.00, 0.860, 0.25},
+  LIGHT_GOLD   = {1.00, .922, .502},
 }
 
--- Global Vars --
+   -- Pile Type --
+TorF = {TABLEAU = 10, FOUNDATION = 20}
+PILE_TYPES = {
+  TorF.TABLEAU,
+  TorF.TABLEAU,
+  TorF.TABLEAU,
+  TorF.TABLEAU,
+  TorF.TABLEAU,
+  TorF.TABLEAU,
+  TorF.TABLEAU,
+  TorF.FOUNDATION,
+  TorF.FOUNDATION,
+  TorF.FOUNDATION,
+  TorF.FOUNDATION
+}
+
+A_T = {
+  CARD_TRANSFER = 3,
+  DECK_REFRESH  = 2,
+  DRAW_CARDS    = 1,
+}
+
+-- GLOBAL VARS --
 board = {}
+reset_img = 1

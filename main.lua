@@ -16,6 +16,7 @@ local cardBuffer = {}
 function love.load()
   
   -- Set Window and Random Seed --
+  --     (from sys-set.lua)     --
   System_Set()
   
   -- Create Board --
@@ -37,5 +38,6 @@ function love.draw()
   board.cardWaste:draw()
   
   -- Draw Selected Card --
+  --  (from drag.lua)   --
   dragged_card_draw()
 end
