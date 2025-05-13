@@ -20,10 +20,15 @@ reset_x = width*0.0125
 reset_y = height*0.90
 reset_scale = 0.1
 
--- Dimensions of Reset Button --
+-- Dimensions of Undo Button --
 undo_x = width*0.0125
 undo_y = height*0.80
 undo_scale = 0.1
+
+-- Dimensions of Mute Button --
+mute_x = width*0.0125
+mute_y = height*0.70
+mute_scale = 0.1
 
 -- Height of Tableau from Top --
 cardPosY = height*0.46
@@ -65,6 +70,7 @@ FILE_LOCATIONS = {
   SOLITAIRE = "Sprites/Solitaire.png",
   RESET     = "Sprites/Reset.png",
   UNDO      = "Sprites/Undo.png",
+  MUTE      = "Sprites/Mute.png",
   VICTORY   = "Sprites/Win.png",
     -- Audio --
   WIN       = "SFX/Win.mp3",
@@ -108,3 +114,4 @@ A_T = {
 -- GLOBAL VARS --
 board = {}
 reset_img = 1
+master_volume = 1

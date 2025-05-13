@@ -54,8 +54,12 @@ end
 -- REMOVE ALL CARDS AFTER A CERTAIN POINT --
 function Pile:removeI(card)
   local cT = {}
+  local prev_shown = false
   for i=1,#self.cards,1 do
     if self.cards[i] == card then
+      if i > 1 then
+        prev_shown = self.cards[i-1].faceUp
+      end
       for j=i,#self.cards,0 do
         if self.cards[j] == nil then break end
         self.cards[j].pile = nil
@@ -68,7 +72,7 @@ function Pile:removeI(card)
     self.cards[#self.cards].draggable = true
 
   end
-  return cT
+  return {cT, prev_shown}
 end
 
 -- DRAW PILE --
@@ -112,7 +116,7 @@ function Foundation_Pile:add(card)
 end
 
 -- REMOVE CARD FROM PILE --
-function Pile:remove()
+function Foundation_Pile:remove()
   local card = table.remove(self.cards)
   card.pile = nil
   if #self.cards > 1 then

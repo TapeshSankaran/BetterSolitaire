@@ -68,7 +68,7 @@ function Board:pull_from_deck()
   if #self.cardWaste.cards == 0 then
     table.insert(self.action_stack, {cardBuffer, cT})
     for _, card in ipairs(cardBuffer) do
-      self.deck:stage(card)
+      self.deck:floor(card)
     end
     cardBuffer = {}
     shuffle_SFX:play()
@@ -93,7 +93,7 @@ function Board:undo()
   -- Determines what action is being reverted --
   if #action == A_T.CARD_TRANSFER then
     -- Pulls card back to original position --
-    action[1]:transfer(action[2], true)
+    action[1]:transfer(action[2], action[3])
   elseif #action == A_T.DECK_REFRESH then
     -- Unrefreshes the deck (returns cards to buffer and waste pile) --
     self:undo_deck_refresh(action[1], action[2])
@@ -106,14 +106,14 @@ end
 -- UNDO THE RESTAGING OF DECK --
 function Board:undo_deck_refresh(action_one, action_two)
   for i, card in ipairs(action_one) do
-    if i > #action_one-3 then break end
-    card.position = Vector(-100, -100)
-    card.draggable = false
-    card.faceUp = true
-    table.insert(cardBuffer, card)
-  end
-  for _, card in ipairs(action_two) do
-    self.cardWaste:add(card)
+    if i > #action_one-3 then
+      self.cardWaste:add(card)
+    else
+      card.position = Vector(-100, -100)
+      card.draggable = false
+      card.faceUp = true
+      table.insert(cardBuffer, card)
+    end
   end
   if #self.cardWaste.cards > 0 then
     self.cardWaste.cards[#self.cardWaste.cards].draggable = true
@@ -188,8 +188,16 @@ function Board:draw_background()
   love.graphics.draw(solitaire, width*0.3, height*0.05, 0, 0.3, 0.3)
   love.graphics.draw(reset_img, reset_x, reset_y, 0, reset_scale, reset_scale)
   love.graphics.draw(undo_img, undo_x, undo_y, 0, undo_scale, undo_scale)
+  
   -- Draw the deck --
   self.deck:draw()
+  
+  -- Draw mute button --
+  if master_volume == 1 then
+    love.graphics.setColor(COLORS.GREEN)
+  end
+  love.graphics.draw(mute_img, mute_x, mute_y, 0, mute_scale, mute_scale)
+  love.graphics.setColor(COLORS.WHITE)
 end
 
 return Board

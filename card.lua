@@ -11,7 +11,9 @@ emptyCard = love.graphics.newImage(FILE_LOCATIONS.EMPTY)
 solitaire = love.graphics.newImage(FILE_LOCATIONS.SOLITAIRE)
 reset_img = love.graphics.newImage(FILE_LOCATIONS.RESET)
 undo_img  = love.graphics.newImage(FILE_LOCATIONS.UNDO)
-win_img  = love.graphics.newImage(FILE_LOCATIONS.VICTORY)
+mute_img  = love.graphics.newImage(FILE_LOCATIONS.MUTE)
+win_img   = love.graphics.newImage(FILE_LOCATIONS.VICTORY)
+
 
 -- Load all Audio --
 win_SFX     = love.audio.newSource(FILE_LOCATIONS.WIN, "static")
@@ -79,20 +81,32 @@ end
 function Card:transfer(pile, undo_action)
   
   undo_action = undo_action or false
+  local prev_shown = false
   
   if self.pile.cards[#self.pile.cards] == self then
+    if #self.pile.cards > 1 then
+      prev_shoawn = self.pile.cards[#self.pile.cards-1].faceUp
+    end
     self.pile:remove()
     pile:add(self, undo_action)
     self.isDragging = false
   else
-    local cT = self.pile:removeI(self)
+    local cT_list = self.pile:removeI(self)
+    local cT = cT_list[1]
+    prev_shown = cT_list[2]
+
     
-    for _,c in ipairs(cT) do
-      pile:add(c)
+    for i,c in ipairs(cT) do
+      if i == 1 and undo_action then
+        pile:add(c, undo_action)
+      else
+        pile:add(c)
+      end
     end
     self.isDragging = false
   end
   move_SFX:play()
+  return not prev_shown
 end
   
 -- STOP DRAGGING CARD --
@@ -116,8 +130,8 @@ function Card:stopDrag(mouseX, mouseY)
               break
             end
             -- Transfer card as well as all cards on it to new pile --
-            table.insert(board.action_stack, {self, self.pile, board.piles[i]})
-            self:transfer(board.piles[i])
+            table.insert(board.action_stack, {self, self.pile, self:transfer(board.piles[i])})
+            
             
             return
           end          
@@ -133,8 +147,8 @@ function Card:stopDrag(mouseX, mouseY)
           end
           
           -- Transfer card as well as all cards on it to new pile --
-          table.insert(board.action_stack, {self, self.pile, board.piles[i]})
-          self:transfer(board.piles[i])
+          table.insert(board.action_stack, {self, self.pile, self:transfer(board.piles[i])})
+          
           return
         else -- If pile is a foundation pile, then...
           
@@ -154,8 +168,8 @@ function Card:stopDrag(mouseX, mouseY)
           end
           
           -- Remove card from current pile and transfer it to new pile --
-          table.insert(board.action_stack, {self, self.pile, board.piles[i]})
-          self:transfer(board.piles[i])
+          table.insert(board.action_stack, {self, self.pile, self:transfer(board.piles[i])})
+          
           return
         
         end

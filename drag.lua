@@ -3,6 +3,7 @@ local Config = "conf"
 
 local mousePressed = false
 local draggableCard = nil
+local is_muted = false
 local not_won = true
 
 function love.update(dt)
@@ -11,6 +12,11 @@ function love.update(dt)
   if draggableCard then
     draggableCard:update(dt, mouseX, mouseY)
   end
+  
+  win_SFX:setVolume(master_volume * 0.5)
+  shuffle_SFX:setVolume(master_volume * 0.5)
+  move_SFX:setVolume(master_volume * 0.25)
+  draw_SFX:setVolume(master_volume * 0.5)
   
   if board:is_won() and not_won then
     win_SFX:play()
@@ -40,6 +46,16 @@ function love.mousepressed(x, y, button, istouch, presses)
   
     if button == 1 and undo_button_isOver(x, y) and not mousePressed then
     board:undo()
+  end
+
+    if button == 1 and mute_button_isOver(x, y) and not mousePressed then
+    if is_muted then
+      master_volume = 1
+      is_muted = false
+    else
+      master_volume = 0
+      is_muted = true
+    end
   end
   mousePressed = true
 end
@@ -94,4 +110,12 @@ function undo_button_isOver(mouseX, mouseY)
   
   return mouseX > undo_x and mouseX < undo_x + undo_sx and
            mouseY > undo_y and mouseY < undo_y + undo_sy
+end
+
+function mute_button_isOver(mouseX, mouseY)
+  local mute_sx = mute_img:getWidth()  * mute_scale
+  local mute_sy = mute_img:getHeight() * mute_scale
+  
+  return mouseX > mute_x and mouseX < mute_x + mute_sx and
+         mouseY > mute_y and mouseY < mute_y + mute_sy
 end
