@@ -105,13 +105,19 @@ PILE_TYPES = {
   TorF.FOUNDATION
 }
 
+   -- Action Type --
 A_T = {
   CARD_TRANSFER = 3,
   DECK_REFRESH  = 2,
   DRAW_CARDS    = 1,
 }
 
+
+
 -- GLOBAL VARS --
+
+  -- Main Board --
 board = {}
-reset_img = 1
+
+  -- Volume Control --
 master_volume = 1

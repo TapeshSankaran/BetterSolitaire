@@ -19,9 +19,9 @@ end
 -- ADD CARD TO PILE --
 function Pile:add(card, undo_action)
   undo_action = undo_action or false
-  
   if undo_action and #self.cards > 0 then
     self.cards[#self.cards].draggable = false
+    
     if self ~= board.cardWaste then
       self.cards[#self.cards].faceUp = false
     end
@@ -72,7 +72,7 @@ function Pile:removeI(card)
     self.cards[#self.cards].draggable = true
 
   end
-  return {cT, prev_shown}
+  return cT, prev_shown
 end
 
 -- DRAW PILE --
@@ -84,7 +84,7 @@ end
 
 -- SPECIAL PILE: FOUNDATION PILE--
 -- CHANGES: CREATES A VISUAL STACK RATHER THAN --
--- A DOWNWARD SLIDING STYLE. 
+-- A DOWNWARD SLIDING STYLE.                   --
 Foundation_Pile = {}
 setmetatable(Foundation_Pile, {__index = Pile})
 

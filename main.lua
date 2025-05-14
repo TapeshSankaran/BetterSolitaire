@@ -3,6 +3,8 @@
 -- CMPM 121
 -- 4-14-2025
 
+io.stdout:setvbuf("no")
+
 local Config = require "conf"
 local Sys    = require "sys-set"
 local Board  = require "board" 

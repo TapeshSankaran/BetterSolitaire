@@ -92,14 +92,23 @@ function Board:undo()
   
   -- Determines what action is being reverted --
   if #action == A_T.CARD_TRANSFER then
+    
     -- Pulls card back to original position --
+    -- Action Layout: {Card being returned, Pile to return to, Card before main card's face side} --
     action[1]:transfer(action[2], action[3])
+  
   elseif #action == A_T.DECK_REFRESH then
+    
     -- Unrefreshes the deck (returns cards to buffer and waste pile) --
+    -- Action Layout: {All cards in prev state's buffer, Prev state's waste pile} --
     self:undo_deck_refresh(action[1], action[2])
+  
   elseif #action == A_T.DRAW_CARDS then
+    
     -- Returns cards to deck from waste pile, then returns cards to waste pile from buffer --
+    -- Action Layout: {Prev state's waste pile} --
     self:undo_card_pull(action[1])
+  
   end
 end
 
@@ -169,7 +178,7 @@ function Board:draw_background()
   love.graphics.rectangle("fill", 0, height*0.98, width, height*0.02)
   love.graphics.rectangle("fill", width*0.97, 0, width*0.03, height)      
 
-  -- Draw empty slot for each pile including deck --
+  -- Draw empty slot for each pile --
   love.graphics.draw(emptyCard, width*0.225, cardPosY, 0, 1.5, 1.5)
   love.graphics.draw(emptyCard, width*0.325, cardPosY, 0, 1.5, 1.5)
   love.graphics.draw(emptyCard, width*0.425, cardPosY, 0, 1.5, 1.5)

@@ -78,33 +78,50 @@ function Card:startDrag(mouseX, mouseY)
 end
 
 -- TRANSFER PILE TO ANOTHER --
-function Card:transfer(pile, undo_action)
+function Card:transfer(pile, prev_card_hidden)
   
-  undo_action = undo_action or false
+  prev_card_hidden = prev_card_hidden or false
   local prev_shown = false
   
+  -- If card is top if its pile...
   if self.pile.cards[#self.pile.cards] == self then
-    if #self.pile.cards > 1 then
-      prev_shoawn = self.pile.cards[#self.pile.cards-1].faceUp
-    end
-    self.pile:remove()
-    pile:add(self, undo_action)
-    self.isDragging = false
-  else
-    local cT_list = self.pile:removeI(self)
-    local cT = cT_list[1]
-    prev_shown = cT_list[2]
-
     
+    -- Set prev_shown to whether previous card in pile is face up if there is a previous card --
+    if #self.pile.cards > 1 then
+      prev_shown = self.pile.cards[#self.pile.cards-1].faceUp
+    end
+    
+    -- Set prev_shown to false if pile is waste pile --
+    if self.pile == board.cardWaste then
+      prev_shown = false
+    end
+    
+    -- Transfer card --
+    self.pile:remove()
+    pile:add(self, prev_card_hidden)
+    self.isDragging = false
+  
+  -- If card is not the top card in deck --
+  else
+  
+    -- Remove cards from pile, check prev card in pile's face state --
+    local cT, prev_shown = self.pile:removeI(self)
+    
+    -- Move all cards to pile. If previous card is hidden(and  -- 
+    -- technically is an undo action), set it to hidden again. --
     for i,c in ipairs(cT) do
-      if i == 1 and undo_action then
-        pile:add(c, undo_action)
+      if i == 1 and prev_card_hidden then
+        pile:add(c, prev_card_hidden)
       else
         pile:add(c)
       end
     end
     self.isDragging = false
   end
+  
+  -- Play audio and return opposite of prev_shown --
+  -- (if previous card is shown, when undoing, no action is needed. --
+  --        action is needed when previous card is not shown)       --
   move_SFX:play()
   return not prev_shown
 end
