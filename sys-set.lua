@@ -3,7 +3,7 @@ require "conf"
 
 function System_Set() 
   -- Set Title of Window --
-  love.window.setTitle("BetterSolitaire")
+  love.window.setTitle("Better Solitaire")
   
   -- Set Filter for Clearness --
   love.graphics.setDefaultFilter("nearest", "nearest")
